@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: carapp
+  template:
+    metadata:
+      labels:
+        app: carapp
+    spec:
+      containers:
+        - image: docker.aiq.rd.elliemae.io/carapp:latest
+          name: carapp-ctr
+          resources:
+            requests:
+              memory: "2Gi"
+            limits:
+              memory: "3Gi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 20
+            periodSeconds: 30
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 20
+            periodSeconds: 30
+          ports:
+            - containerPort: 8080
+              name: carapp-port
+      imagePullSecrets:
+        - name: nexussecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: carapp-svc
+  labels:
+    app: carapp
+spec:
+  type: LoadBalancer
+  selector:
+    app: carapp
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
