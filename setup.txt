@@ -1,0 +1,36 @@
+Docker windows installation:
+https://docs.docker.com/docker-for-windows/install/
+
+###############################################################################
+
+Minikube (local kubernetes) windows installation:
+https://minikube.sigs.k8s.io/docs/start/
+
+###############################################################################
+
+docker commands:
+
+build:
+docker build -t carapp:1.0.0 .
+
+run:
+docker run -it -p 8080:8080 carapp:1.0.0
+
+exec:
+docker exec -it <CONTAINER_ID> sh
+
+###############################################################################
+
+kubernetes commands:
+
+deploy:
+kubectl apply -f /deploy/deployment.yaml
+
+get pods:
+kubectl get pods
+
+delete:
+kubectl delete -f /deploy/deployment.yaml
+
+exec in pod:
+kubectl exec -it <POD_NAME>  sh
